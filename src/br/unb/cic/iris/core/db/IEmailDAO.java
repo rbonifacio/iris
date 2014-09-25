@@ -10,7 +10,9 @@ package br.unb.cic.iris.core.db;
 
 import java.util.List;
 
+import br.unb.cic.iris.core.Account;
 import br.unb.cic.iris.core.EmailMessage;
+import br.unb.cic.iris.core.Folder;
 
 /**
  * A DAO for electronic e-mail messages. Note that the 
@@ -28,6 +30,22 @@ public interface IEmailDAO {
 	 */
 	public void saveMessage(EmailMessage message);
 
+	/**
+	 * A finder method that uses the folder description 
+	 * as criteria. 
+	 * @param description criteria used in the query
+	 * @return A folder that satisfies the criteria
+	 */
+	public Folder findFolder(String description);
+	
+	/**
+	 * A finder method that uses the account as 
+	 * criteria
+	 * @param account criteria used in the query
+	 * @return An Account that satisfies the criteria
+	 */
+	public Account findAccount(String account);
+	
 	/**
 	 * Retrieves all sent messages from the 
 	 * database.

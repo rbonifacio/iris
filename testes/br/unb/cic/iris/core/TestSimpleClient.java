@@ -8,12 +8,9 @@
  */
 package br.unb.cic.iris.core;
 
-import java.io.File;
-import java.io.FileInputStream;
-import java.util.Properties;
+import java.util.List;
 
-import junit.framework.Assert;
-
+import org.junit.Before;
 import org.junit.Test;
 
 /**
@@ -22,28 +19,40 @@ import org.junit.Test;
  */
 public class TestSimpleClient {
 
+	private Configuration c;
+	
+	@Before
+	public void setUp() throws Exception {
+		//set the server configuration
+		c = Configuration.instance();
+		
+		if(!c.validConfiguraion()) {
+			throw new Exception("could not instantiate the configurtion");
+		}
+	}
+	
 	@Test
-	public void test() {
+	public void testSendMessage() {
 		try {
-			//set the server configuration
-			Configuration c = Configuration.instance();
-			c.fromProperties("config.properties");
-			
-			//set the account configurations
-			Properties properties = new Properties();
-			properties.load(new FileInputStream(new File(c.accountPropertyFile())));
-			
-			c.setAccount(properties.getProperty(Configuration.MAIL_USER));
-			c.setPassword(properties.getProperty(Configuration.MAIL_PASSWORD));
-			
-			SimpleClient sc = new SimpleClient();
-			
-			EmailMessage message = new EmailMessage("irismailclient@gmail.com", "irismailclient@gmail.com", "teste", "teste");
-			sc.send(message);
+			(new SimpleClient()).send(new EmailMessage("irismailclient@gmail.com", "irismailclient@gmail.com", "teste", "teste"));
+			org.junit.Assert.assertTrue(true);
 		}catch(Exception e) {
 			e.printStackTrace();
-			Assert.fail(e.getMessage());
+			org.junit.Assert.fail(e.getMessage());
 		}
+	}
+	
+	@Test
+	public void testReadMessages() {
+		try {
+			List<EmailMessage> messages = (new SimpleClient().getMessages(1));
+			org.junit.Assert.assertTrue(messages.size() > 0);
+		}
+		catch(Exception e) {
+			e.printStackTrace();
+			org.junit.Assert.fail(e.getMessage());
+		}
+		
 	}
 
 }

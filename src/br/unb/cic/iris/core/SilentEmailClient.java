@@ -8,6 +8,8 @@
  */
 package br.unb.cic.iris.core;
 
+import java.util.List;
+
 import br.unb.cic.iris.core.exception.EmailException;
 
 /**
@@ -36,6 +38,14 @@ public class SilentEmailClient implements EmailClient {
 		}
 		System.out.println("]");
 		System.out.println("done");
+	}
+
+	/* (non-Javadoc)
+	 * @see br.unb.cic.iris.core.EmailClient#getMessages(int)
+	 */
+	@Override
+	public List<EmailMessage> getMessages(int seqnum) throws EmailException {
+		throw new RuntimeException("not implemented yet");
 	}
 
 }

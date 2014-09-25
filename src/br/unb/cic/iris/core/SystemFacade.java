@@ -8,11 +8,7 @@
  */
 package br.unb.cic.iris.core;
 
-import java.io.File;
-import java.io.FileInputStream;
-import java.io.FileNotFoundException;
-import java.io.IOException;
-import java.util.Properties;
+import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
@@ -21,7 +17,10 @@ import br.unb.cic.iris.core.exception.EmailException;
 import br.unb.cic.iris.persistence.sqlite3.EmailDAO;
 
 /**
- * The facade class of the project. 
+ * The project system facade. This class provides methods that should be used by
+ * the (possible different) UI component(s). Indeed, it is recommended that all
+ * interactions between the UI packages and the core package should occurs
+ * through this class.
  * 
  * @author rbonifacio
  */
@@ -30,45 +29,46 @@ public class SystemFacade {
 	private EmailClient client;
 
 	public SystemFacade() {
-		//client = new SimpleClient();
-		client = new SilentEmailClient();
+		client = new SimpleClient();
+		// client = new SilentEmailClient();
 	}
-	
+
 	public void send(EmailMessage message) throws EmailException {
 		try {
 			Configuration c = Configuration.instance();
-			
-			if(!c.validConfiguraion()) {
-				loadAllProperties(c);
+
+			if (c == null) {
+				throw new EmailException("could not get the configuration data");
 			}
-			
+
 			client.send(message);
-			
+
 			IEmailDAO dao = EmailDAO.instance();
-			
+
 			dao.saveMessage(message);
-		}
-		catch(EmailException e) {
-			Logger.getAnonymousLogger().log(Level.SEVERE, "could not send the e-mail message");
+		} catch (EmailException e) {
+			Logger.getAnonymousLogger().log(Level.SEVERE,
+					"could not send the e-mail message");
 			throw new RuntimeException(e);
-		}
-		catch(IOException e) {
+		} catch (Exception e) {
 			throw new RuntimeException(e.getMessage());
 		}
 	}
 
-	/*
-	 * Retrieve all account configurations from property files. 
-	 */
-	private void loadAllProperties(Configuration c) throws IOException, FileNotFoundException {
-		c.fromProperties("config.properties");
-		
-		//set the account configurations
-		Properties properties = new Properties();
-		properties.load(new FileInputStream(new File(c.accountPropertyFile())));
-		
-		//set the user and password properties
-		c.setAccount(properties.getProperty(Configuration.MAIL_USER));
-		c.setPassword(properties.getProperty(Configuration.MAIL_PASSWORD));
+	public List<EmailMessage> retrieveMessages(int sequence) {
+		Configuration c = Configuration.instance();
+
+		if (!c.validConfiguraion()) {
+			// loadAllProperties(c);
+		}
+
+		IEmailDAO dao = EmailDAO.instance();
+		// TODO: I have to implement this method.
+		// TODO: In addition, it is important to support different accounts
+		// within the database.
+		// int sequence = dao.lastIncomeMessage();
+		return null;
+		// return client.getMessages(sequence);
 	}
+
 }

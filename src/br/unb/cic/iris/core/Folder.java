@@ -18,6 +18,7 @@ import java.util.List;
  */
 public class Folder extends FolderContent {
 
+	private Integer id;
 	private String name;
 	private List<FolderContent> contents;
 	
@@ -26,6 +27,19 @@ public class Folder extends FolderContent {
 		contents = new ArrayList<FolderContent>();
 	}
 	
+	public Folder(Integer id, String name) {
+		this(name);
+		this.id = id;
+	}
+	
+	public Integer getId() {
+		return id;
+	}
+
+	public void setId(Integer id) {
+		this.id = id;
+	}
+
 	public String getName() {
 		return name;
 	}

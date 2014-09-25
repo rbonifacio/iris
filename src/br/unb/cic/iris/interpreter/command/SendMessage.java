@@ -8,10 +8,10 @@
  */
 package br.unb.cic.iris.interpreter.command;
 
-import java.io.Console;
+import java.util.Scanner;
 
-import br.unb.cic.iris.core.Configuration;
-import br.unb.cic.iris.interpreter.i18n.Message;
+import br.unb.cic.iris.core.EmailMessage;
+import br.unb.cic.iris.core.SystemFacade;
 
 /**
  * 
@@ -24,18 +24,30 @@ public class SendMessage implements MailCommand {
 	 */
 	@Override
 	public void execute() {
-		Configuration instance = Configuration.instance();
-		instance.fromProperties("config.properties");
-		if(instance.getPassword() == null) {
-			Console console = System.console();
-			if(console == null) {
-				System.out.println(Message.instance().getMessage("invalid-terminal"));
-				return;
-			}
-			char[] pwd = console.readPassword(Message.instance().getMessage("account-password") + instance.getAccount() + ": ");
-			instance.setPassword(new String(pwd));
+		String from, to, subject, content;
+		Scanner sc = new Scanner(System.in);
+	
+		System.out.println("From: " );
+		from = sc.nextLine();
+		
+		System.out.println("To: ");
+		to = sc.nextLine();
+		
+		System.out.println("Subject: ");
+		subject = sc.nextLine();
+		
+		System.out.println("Content: ");
+		content = sc.nextLine();
+		
+		EmailMessage m = new EmailMessage(from, to, null, null, subject, content);
+		
+		SystemFacade facade = new SystemFacade();
+		try {
+			facade.send(m);
 		}
-		System.out.println("sending message");
+		catch(Exception e) {
+			throw new RuntimeException(e);
+		}
 	}
 
 	/* (non-Javadoc)

@@ -8,9 +8,9 @@
  */
 package br.unb.cic.iris.core;
 
-import org.junit.Test;
+import org.junit.Assert;
 
-import junit.framework.Assert;
+import org.junit.Test;
 
 /**
  * @author ExceptionHandling
@@ -24,6 +24,7 @@ public class TestSystemFacade {
 			EmailMessage message = new EmailMessage("irismailclient@gmail.com", "irismailclient@gmail.com", "teste", "teste");
 			SystemFacade facade = new SystemFacade();
 			facade.send(message);
+			Assert.assertTrue(true);
 		}catch(Exception e) {
 			e.printStackTrace();
 			Assert.fail();

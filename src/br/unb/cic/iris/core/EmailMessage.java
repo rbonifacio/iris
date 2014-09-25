@@ -40,6 +40,27 @@ public class EmailMessage extends FolderContent {
 	}
 
 	
+	
+	public void setTo(String to) {
+		this.to = to;
+	}
+
+	public void setCc(String cc) {
+		this.cc = cc;
+	}
+
+	public void setBcc(String bcc) {
+		this.bcc = bcc;
+	}
+
+	public void setSubject(String subject) {
+		this.subject = subject;
+	}
+
+	public void setMessage(String message) {
+		this.message = message;
+	}
+
 	public String getFrom() {
 		return from;
 	}

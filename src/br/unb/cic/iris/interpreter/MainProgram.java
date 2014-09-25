@@ -35,9 +35,15 @@ public class MainProgram {
 	}
 	
 	private void readCommand() {
-		System.out.print(Message.instance().getMessage("prompt"));
-		String cmd = sc.nextLine();
-		CommandManager.singleton().runCommand(cmd);
+		try {
+			System.out.print(Message.instance().getMessage("prompt"));
+			String cmd = sc.nextLine();
+			CommandManager.singleton().runCommand(cmd);
+		}
+		catch(RuntimeException e) {
+			System.out.println("Erro! " + e.getMessage());
+			
+		}
 		readCommand();
 	}
 	
